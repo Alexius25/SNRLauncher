@@ -34,11 +34,29 @@ function InstallPage() {
                 <img className="p-6" src="/subnautica-logo-snr.png" alt="Installation" />
             </div>
 
+            {/* Changelog */}
+            <div className="flex flex-col items-center mt-4 px-4 z-10">
+                <div className="bg-gray-700 bg-opacity-70 backdrop-blur-md rounded-lg p-4 max-w-5xl w-full">
+                    <h2 className="text-2xl font-bold mb-2 text-center">ChangeLog</h2>
+                    <ul className="list-disc list-inside space-y-1 max-h-48 overflow-y-auto custom-scrollbar">
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Added new features to enhance user experience.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Improved performance and stability.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Fixed bugs reported in the previous version.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Updated dependencies to the latest versions.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
+                        <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
+                    </ul>
+                </div>
+            </div> 
+
             {/* Install-Button */}
             <div className="flex flex-col items-center mt-auto mb-6 z-10">
                 <button className="w-3xs text-center bg-gray-500 cursor-pointer text-white flex items-center justify-center gap-x-2 p-2 rounded hover:bg-green-600 transition-colors duration-200 ease-in-out">
                     <MdFileDownload className="text-2xl" />
-                    <span>Install</span>
+                    <span>Start Installation</span>
                 </button>
             </div>
         </div>
