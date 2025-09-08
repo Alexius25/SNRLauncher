@@ -3,9 +3,15 @@ import { MdFileDownload } from "react-icons/md";
 import { FaDiscord } from "react-icons/fa";
 import { IoLogoGithub } from "react-icons/io";
 
+import ModSelectPage from "./ModSelectPage";
+
 function InstallPage() {
     // State zum Tracken der verfügbaren Höhe
     const [maxChangelogHeight, setMaxChangelogHeight] = useState("12rem");
+    // State für den Animationsstatus
+    const [isInstalling, setIsInstalling] = useState(false);
+    // State für die neue Seite
+    const [showInstallProgress, setShowInstallProgress] = useState(false);
     
     // Berechnen der verfügbaren Höhe für das Changelog basierend auf der Fenstergröße
     useEffect(() => {
@@ -27,6 +33,21 @@ function InstallPage() {
         return () => window.removeEventListener('resize', calculateHeight);
     }, []);
 
+    // Handler für den Install-Button
+    const handleInstallClick = () => {
+        setIsInstalling(true);
+        
+        // Nach der Animation die neue Seite anzeigen
+        setTimeout(() => {
+            setShowInstallProgress(true);
+        }, 800); // 800ms = Dauer der Animation
+    };
+
+    // Zeige die Installation-Progress-Page an, wenn die Animation abgeschlossen ist
+    if (showInstallProgress) {
+        return <ModSelectPage />;
+    }
+
     return (
         <div className="relative flex flex-col min-h-screen h-screen overflow-hidden">
         {/* Background Image */}
@@ -35,7 +56,7 @@ function InstallPage() {
             </div>
 
             {/* Top-Bar */}
-            <div className="fixed top-2 left-0 right-0 w-[95%] h-12 bg-gray-600 z-20 flex justify-between items-center px-4 shadow-3xl mx-auto rounded-lg">
+            <div className={`fixed top-2 left-0 right-0 w-[95%] h-12 bg-gray-600 z-20 flex justify-between items-center px-4 shadow-3xl mx-auto rounded-lg transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>
                 {/* Logo left */}
                 <a href="https://369studios.tech/" target="_blank" className="p-1 rounded-full transition-colors duration-200 ease-in-out cursor-pointer hover:bg-white/10 flex items-center justify-center">
                     <img className="h-8 rounded-full" src="/SNR.jpg" alt="Logo" />
@@ -53,7 +74,7 @@ function InstallPage() {
             </div>
 
             {/* Hauptinhalt - mit reduziertem Abstand für den fixierten Button am Ende */}
-            <div className="flex flex-col mt-16 mb-16 z-10">
+            <div className={`flex flex-col mt-16 mb-16 z-10 transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>
                 {/* Logo - Angepasste Größe */}
                 <div className="flex justify-center mb-3">
                     <img className="p-3 max-h-48 w-auto object-contain" src="/subnautica-logo-snr.png" alt="Installation" />
@@ -82,8 +103,11 @@ function InstallPage() {
             </div>
 
             {/* Install-Button - Näher am Changelog positioniert */}
-            <div className="fixed bottom-3 left-0 right-0 flex justify-center z-30">
-                <button className="w-3xs text-center bg-gray-500 cursor-pointer text-white flex items-center justify-center gap-x-2 p-2 rounded hover:bg-green-600 transition-colors duration-200 ease-in-out shadow-lg">
+            <div className={`fixed bottom-3 left-0 right-0 flex justify-center z-30 transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>
+                <button 
+                    onClick={handleInstallClick}
+                    className="w-3xs text-center bg-gray-500 cursor-pointer text-white flex items-center justify-center gap-x-2 p-2 rounded hover:bg-green-600 transition-colors duration-200 ease-in-out shadow-lg"
+                >
                     <MdFileDownload className="text-2xl" />
                     <span>Start Installation</span>
                 </button>
