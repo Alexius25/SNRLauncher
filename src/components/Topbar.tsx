@@ -1,12 +1,11 @@
-import React from "react";
 import { FaDiscord } from "react-icons/fa";
 import { IoLogoGithub } from "react-icons/io";
 
 interface TopbarProps {
-  isAnimating?: boolean;
+  //isAnimating?: boolean;
 }
 
-function Topbar({ isAnimating = false }: TopbarProps) {
+function Topbar({}: TopbarProps) {
   return (
     <div className="fixed top-6 left-0 right-0 w-[95%] h-12 bg-gray-600 z-20 flex justify-between items-center px-4 shadow-3xl mx-auto rounded-lg">
       {/* Logo left */}

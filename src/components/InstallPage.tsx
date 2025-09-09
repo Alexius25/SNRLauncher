@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MdFileDownload } from "react-icons/md";
 import ModSelectPage from "./ModSelectPage";
 import Topbar from "./Topbar";
@@ -24,7 +24,7 @@ function InstallPage() {
     useEffect(() => {
         async function fetchChangelog() {
             try {
-                const response = await fetch('/Changelog.json');
+                const response = await fetch('https://raw.githubusercontent.com/Alexius25/SNRLauncher/refs/heads/main/Changelog.json');
                 const data = await response.json();
                 setChangelog(data.changelog || []);
             } catch (error) {
@@ -78,7 +78,7 @@ function InstallPage() {
             </div>
 
             {/* Top-Bar */}
-            <Topbar isAnimating={isInstalling} />
+            <Topbar />
 
             {/* Hauptinhalt - mit reduziertem Abstand für den fixierten Button am Ende */}
             <div className={`flex flex-col mt-16 mb-16 z-10 transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>

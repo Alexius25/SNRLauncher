@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -9,16 +9,29 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import Topbar from "./Topbar";
 
+interface Mod {
+    name: string;
+    description?: string;
+    version?: string;
+    guid: string;
+    dependencies?: string[];
+    downloadURL?: string;
+}
+
+interface ModsData {
+    mods: Mod[];
+}
+
 // Ergänze die Props um isAnimating
 interface ModSelectPageProps {
     isAnimating?: boolean;
 }
 
 function ModSelectPage({ isAnimating = false }: ModSelectPageProps) {
-    const [mods, setMods] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedMods, setSelectedMods] = useState({});
-    const [fullyVisible, setFullyVisible] = useState(false);
+    const [mods, setMods] = useState<Mod[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [selectedMods, setSelectedMods] = useState<Record<string, boolean>>({});
+    const [fullyVisible, setFullyVisible] = useState<boolean>(false);
 
     useEffect(() => {
         // Setze nach kurzer Verzögerung den Zustand auf vollständig sichtbar
@@ -34,15 +47,15 @@ function ModSelectPage({ isAnimating = false }: ModSelectPageProps) {
         async function loadMods() {
             try {
                 const res = await fetch(
-                    "/mods.json"
+                    "https://raw.githubusercontent.com/Alexius25/SNRLauncher/refs/heads/main/mods.json"
                 );
-                const data = await res.json();
+                const data: ModsData = await res.json();
                 console.log("Loaded mods:", data.mods);
                 setMods(data.mods || []);
                 
                 // Initialize selected state for each mod
-                const initialSelectedState = {};
-                data.mods.forEach(mod => {
+                const initialSelectedState: Record<string, boolean> = {};
+                data.mods.forEach((mod: Mod) => {
                     initialSelectedState[mod.guid] = false;
                 });
                 setSelectedMods(initialSelectedState);
@@ -55,7 +68,7 @@ function ModSelectPage({ isAnimating = false }: ModSelectPageProps) {
         loadMods();
     }, []);
 
-    const handleModSelection = (guid) => {
+    const handleModSelection = (guid: string) => {
         setSelectedMods(prev => ({
             ...prev,
             [guid]: !prev[guid]
@@ -79,7 +92,8 @@ function ModSelectPage({ isAnimating = false }: ModSelectPageProps) {
                     ) : mods.length > 0 ? (
                         <div className="flex flex-col h-full">
                             <div className="overflow-y-auto flex-grow custom-scrollbar pr-4">
-                                <Accordion type="multiple" collapsible className="w-full">
+                                {/* Remove "collapsible" prop as it's not supported by your Accordion component */}
+                                <Accordion type="multiple" className="w-full">
                                     {mods.map((mod, index) => (
                                         <AccordionItem key={index} value={`item-${index}`}>
                                             <div className="flex items-center gap-4">
@@ -124,7 +138,16 @@ function ModSelectPage({ isAnimating = false }: ModSelectPageProps) {
                             <div className="pt-4 mt-auto border-t border-gray-600">
                                 <button 
                                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full"
-                                    onClick={() => console.log("Selected mods:", Object.keys(selectedMods).filter(guid => selectedMods[guid]))}
+                                    onClick={() => {
+                                        const selectedModsInfo = mods
+                                            .filter(mod => selectedMods[mod.guid])
+                                            .map(mod => ({
+                                                name: mod.name,
+                                                guid: mod.guid,
+                                                url: mod.downloadURL || 'No URL provided'
+                                            }));
+                                        console.log("Selected mods:", selectedModsInfo);
+                                    }}
                                 >
                                     Install Selected Mods
                                 </button>
