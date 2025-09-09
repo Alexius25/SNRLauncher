@@ -1,5 +1,12 @@
 {
     "mods": [
-        
+        {
+            "guid": "com.alexius25.SNRLib",
+            "name": "SNR-Lib",
+            "description": "The Core mod for the SNR Project.",
+            "version": "1.0.0",
+            "dependencies": [],
+            "downloadURL": "https://369studios.tech"
+        }
     ]
 }
