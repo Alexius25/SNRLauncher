@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { MdFileDownload } from "react-icons/md";
-import { FaDiscord } from "react-icons/fa";
-import { IoLogoGithub } from "react-icons/io";
-
 import ModSelectPage from "./ModSelectPage";
+import Topbar from "./Topbar";
+
+interface ChangelogEntry {
+    version: string;
+    changes: string[];
+}
 
 function InstallPage() {
     // State zum Tracken der verfügbaren Höhe
@@ -11,7 +14,25 @@ function InstallPage() {
     // State für den Animationsstatus
     const [isInstalling, setIsInstalling] = useState(false);
     // State für die neue Seite
-    const [showInstallProgress, setShowInstallProgress] = useState(false);
+    const [showModSelectPage, setShowModSelectPage] = useState(false);
+    // State für Animation der ModSelectPage
+    const [isModSelectFadingIn, setIsModSelectFadingIn] = useState(false);
+
+    const [changelog, setChangelog] = useState<ChangelogEntry[]>([]);
+
+    // Fetch Changelog from JSON file
+    useEffect(() => {
+        async function fetchChangelog() {
+            try {
+                const response = await fetch('/Changelog.json');
+                const data = await response.json();
+                setChangelog(data.changelog || []);
+            } catch (error) {
+                console.error("Error fetching changelog:", error);
+            }
+        }
+        fetchChangelog();
+    }, []);
     
     // Berechnen der verfügbaren Höhe für das Changelog basierend auf der Fenstergröße
     useEffect(() => {
@@ -39,39 +60,25 @@ function InstallPage() {
         
         // Nach der Animation die neue Seite anzeigen
         setTimeout(() => {
-            setShowInstallProgress(true);
+            setIsModSelectFadingIn(true);
+            setShowModSelectPage(true);
         }, 800); // 800ms = Dauer der Animation
     };
 
     // Zeige die Installation-Progress-Page an, wenn die Animation abgeschlossen ist
-    if (showInstallProgress) {
-        return <ModSelectPage />;
+    if (showModSelectPage) {
+        return <ModSelectPage isAnimating={isModSelectFadingIn} />;
     }
 
     return (
         <div className="relative flex flex-col min-h-screen h-screen overflow-hidden">
-        {/* Background Image */}
+            {/* Background Image */}
             <div className="absolute inset-0 -z-10 pointer-events-none">
                 <img className="w-full h-full object-cover" src="/background.jpg" alt="Background" />
             </div>
 
             {/* Top-Bar */}
-            <div className={`fixed top-2 left-0 right-0 w-[95%] h-12 bg-gray-600 z-20 flex justify-between items-center px-4 shadow-3xl mx-auto rounded-lg transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>
-                {/* Logo left */}
-                <a href="https://369studios.tech/" target="_blank" className="p-1 rounded-full transition-colors duration-200 ease-in-out cursor-pointer hover:bg-white/10 flex items-center justify-center">
-                    <img className="h-8 rounded-full" src="/SNR.jpg" alt="Logo" />
-                </a>
-
-                {/* Buttons right */}
-                <div className="flex space-x-2">
-                    <a href="https://discord.gg/cnErGuf6UT" target="_blank" className="text-2xl p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer hover:bg-white/10 flex items-center justify-center">
-                        <FaDiscord />
-                    </a>
-                    <a href="https://github.com/369-Studios" target="_blank" className="text-2xl p-2 rounded-full transition-colors duration-200 ease-in-out cursor-pointer hover:bg-white/10 flex items-center justify-center">
-                        <IoLogoGithub />
-                    </a>
-                </div>
-            </div>
+            <Topbar isAnimating={isInstalling} />
 
             {/* Hauptinhalt - mit reduziertem Abstand für den fixierten Button am Ende */}
             <div className={`flex flex-col mt-16 mb-16 z-10 transition-transform duration-800 ease-in-out ${isInstalling ? '-translate-x-full' : ''}`}>
@@ -83,21 +90,28 @@ function InstallPage() {
                 {/* Changelog - Angepasste Höhe und responsives Design */}
                 <div className="flex flex-col items-center px-4">
                     <div className="bg-gray-700 bg-opacity-70 backdrop-blur-md rounded-lg p-3 max-w-5xl w-full">
-                        <h2 className="text-lg font-bold mb-1 text-center">ChangeLog</h2>
-                        <ul 
-                            className="list-disc list-inside space-y-1 overflow-y-auto custom-scrollbar"
+                        <h2 className="text-lg font-bold mb-1 text-center">Changelogs</h2>
+                        <div 
+                            className="overflow-y-auto custom-scrollbar"
                             style={{ maxHeight: maxChangelogHeight }}
                         >
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Added new features to enhance user experience.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Improved performance and stability.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Fixed bugs reported in the previous version.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Updated dependencies to the latest versions.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
-                            <li className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">Enhanced security measures.</li>
-                        </ul>
+                            {changelog.length > 0 ? (
+                                changelog.map((entry, index) => (
+                                    <div key={index} className="mb-4">
+                                        <h3 className="text-md font-semibold mb-1">Version {entry.version}</h3>
+                                        <ul className="list-disc list-inside space-y-1">
+                                            {entry.changes.map((change, changeIndex) => (
+                                                <li key={changeIndex} className="bg-gray-600 p-2 rounded-2xl mr-3 my-2">
+                                                    {change}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-center text-gray-300 py-2">Loading changelog...</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

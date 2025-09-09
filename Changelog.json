@@ -1,0 +1,24 @@
+{
+    "changelog": [
+        {
+            "version": "1.2.0",
+            "changes": [
+                "Fixed bugs in the Sleep and Stamina mod related to stamina regeneration.",
+                "Enhanced user interface for easier configuration of all mods."
+            ]
+        },
+        {
+            "version": "1.1.0",
+            "changes": [
+                "Added new feature to the Weather System mod allowing dynamic weather changes based on in-game time.",
+                "Improved performance of the Upscaler mod for better frame rates on lower-end systems."
+            ]
+        },
+        {
+            "version": "1.0.0",
+            "changes": [
+                "Initial release with core mod and three additional mods: Sleep and Stamina, Upscaler, and Weather System."
+            ]
+        }
+    ]
+}

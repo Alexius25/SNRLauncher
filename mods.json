@@ -7,6 +7,30 @@
             "version": "1.0.0",
             "dependencies": [],
             "downloadURL": "https://369studios.tech"
+        },
+        {
+            "guid": "com.parkerrdev.SleepAndStamina",
+            "name": "Sleep and Stamina",
+            "description": "Adds a sleep and stamina system to the game.",
+            "version": "1.0.0",
+            "dependencies": ["com.alexius25.SNRLib"],
+            "downloadURL": "https://369studios.tech"
+        },
+        {
+            "guid": "com.parkerrdev.SNUpscaler",
+            "name": "Upscaler",
+            "description": "Adds an upscaler to the game.",
+            "version": "1.0.0",
+            "dependencies": ["com.alexius25.SNRLib"],
+            "downloadURL": "https://369studios.tech"
+        },
+        {
+            "guid": "com.parkerrdev.SNWeather",
+            "name": "Weather System",
+            "description": "Adds a weather system to the game.",
+            "version": "1.0.0",
+            "dependencies": ["com.alexius25.SNRLib"],
+            "downloadURL": "https://369studios.tech"
         }
     ]
 }
